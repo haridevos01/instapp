@@ -16,11 +16,15 @@ import { app, server } from "./socket.js"
 const port = process.env.PORT || 5000
 
 app.use(cors({
-    origin: ["http://localhost:5173",
-    "https://instapp-eight.vercel.app"],
-    credentials: true
+  origin: [
+    "http://localhost:5173",
+    "https://instapp-eight.vercel.app"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
 }))
 
+app.options("*", cors())
 app.use(express.json())
 app.use(cookieParser())
 
