@@ -17,7 +17,7 @@ const port = process.env.PORT || 5000
 
 app.use(cors({
     origin: ["http://localhost:5173",
-    "instapp-eight.vercel.app"],
+    "https://instapp-eight.vercel.app"],
     credentials: true
 }))
 
