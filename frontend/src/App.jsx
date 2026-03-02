@@ -29,7 +29,7 @@ import getAllNotifications from './hooks/getAllNotifications'
 import { setOnlineUsers } from './redux/socketSlice'
 import { setNotificationData } from './redux/userSlice'
 
-export const serverUrl = "http://localhost:8000"
+export const serverUrl = "https://instapp-zhso.onrender.com"
 
 function App() {
 
