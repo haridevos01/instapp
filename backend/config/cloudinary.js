@@ -1,34 +1,26 @@
-import { v2 as cloudinary } from "cloudinary"
-import fs from "fs"
+import { v2 as cloudinary } from "cloudinary";
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET,
-})
+});
 
-const uploadOnCloudinary = async (filePath) => {
-  try {
-    if (!filePath) return null
+const uploadOnCloudinary = (fileBuffer) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: "instapp_profiles" },
+      (error, result) => {
+        if (error) {
+          console.log("Cloudinary Error:", error);
+          return reject(error);
+        }
+        resolve(result.secure_url);
+      }
+    );
 
-    const response = await cloudinary.uploader.upload(filePath, {
-      resource_type: "auto",
-    })
+    stream.end(fileBuffer);
+  });
+};
 
-    // ✅ Delete file AFTER successful upload
-    fs.unlinkSync(filePath)
-
-    return response
-  } catch (error) {
-
-    // ✅ Delete file if upload fails
-    if (filePath && fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath)
-    }
-
-    console.log("Cloudinary Error:", error)
-    return null
-  }
-}
-
-export default uploadOnCloudinary
+export default uploadOnCloudinary;

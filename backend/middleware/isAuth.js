@@ -1,23 +1,23 @@
-import jwt from "jsonwebtoken"; 
- 
- const isAuth=async(req,res,next)=>{
-    try{
-        const token=req.cookies.token
-        if(!token){
-            return res.status(400).json({message:"token is not found"})
-        }
-    
-    const verifyToken=await jwt.verify(token,process.env.JWT_SECRET)
+import jwt from "jsonwebtoken";
 
-    req.userId=verifyToken.userId
+const isAuth = async (req, res, next) => {
+  try {
+    const token = req.cookies.token;
 
-    next()
-
-    }catch(error){
-        return res.status(500).json({message:`is auth error ${error}`})
-
+    if (!token) {
+      return res.status(401).json({ message: "Authentication required" });
     }
- }
 
+    const verifyToken = jwt.verify(token, process.env.JWT_SECRET);
 
- export default isAuth
+    req.userId = verifyToken.userId;
+
+    next();
+
+  } catch (error) {
+    console.log("Auth Error:", error.message);
+    return res.status(401).json({ message: "Invalid or expired token" });
+  }
+};
+
+export default isAuth;
